@@ -36,3 +36,4 @@ Your application must meet the following requirements:
 
  - When the user navigates to `/register`, they should be presented with a form that allows them to register as a new user.
 # trinity-saturday-in-the-park
+# trinity-saturday-in-the-park
