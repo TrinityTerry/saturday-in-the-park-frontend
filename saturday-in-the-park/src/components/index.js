@@ -1,3 +1,3 @@
 export { Footer } from "./footer";
-export {Card} from "./cards"
+export {Card, CardContainer} from "./cards"
 export {Navbar} from "./navigation"

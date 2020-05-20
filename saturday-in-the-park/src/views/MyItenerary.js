@@ -1,6 +1,6 @@
 import React from "react";
 
-function ItenaryForm({ info, match }) {
+function MyItinerary({ info, match }) {
   return (
     <h2>
       {" "}
@@ -13,4 +13,4 @@ function ItenaryForm({ info, match }) {
   );
 }
 
-export default ItenaryForm
+export default MyItinerary;
