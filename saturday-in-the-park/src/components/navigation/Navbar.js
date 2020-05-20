@@ -5,7 +5,7 @@ import AppsIcon from "@material-ui/icons/Apps";
 import { Link, useHistory } from "react-router-dom";
 import { Menu, Input } from "semantic-ui-react";
 
-export default function MenuExampleStackable({ userInfo }) {
+export default function MenuExampleStackable({ user }) {
   const [activeItem, setActiveItem] = useState();
   let history = useHistory();
   const handleItemClick = (e, { name }) => {
@@ -44,7 +44,7 @@ export default function MenuExampleStackable({ userInfo }) {
         >
           <FavoriteIcon />
         </Menu.Item>
-        {userInfo ? (
+        {user ? (
           <Menu.Item
             position="right"
             name="signout"

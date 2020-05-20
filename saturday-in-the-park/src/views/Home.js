@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import { CardContainer } from "../components";
 import { DataManager, MiscManager } from "../modules";
 import { Link } from "react-router-dom";
+import { Navbar } from "../components";
 
-const Home = () => {
+const Home = ({ user, noUserNav }) => {
   const [parks, setParks] = useState([]);
   const [attractions, setAttractions] = useState([]);
   const [parksandAttr, setParksandAttr] = useState([]);
@@ -36,6 +37,7 @@ const Home = () => {
   }, [parks, attractions]);
   return (
     <>
+      {noUserNav}
       {parksandAttr.map((park, i) => {
         return (
           <div key={park.park.url}>
