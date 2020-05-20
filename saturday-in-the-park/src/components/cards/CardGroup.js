@@ -21,9 +21,9 @@ export default function FullWidthGrid({ cardInfoArray }) {
   return (
     <div className={classes.root}>
       <Grid container spacing={3}>
-        {cardInfoArray.map((cardObj) => {
+        {cardInfoArray.map((cardObj, i) => {
           return (
-            <Grid item xs={6} sm={3}>
+            <Grid key={i} item xs={6} sm={3}>
               <Card cardInfo={cardObj} />
             </Grid>
           );

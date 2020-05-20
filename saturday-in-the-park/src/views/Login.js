@@ -60,8 +60,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Login({getUserInfo}) {
-  const history = useHistory()
+export default function Login({ getUserInfo }) {
+  const history = useHistory();
   const classes = useStyles();
   const [loginForm, setLoginForm] = useState({ username: "", password: "" });
   const [error, setError] = useState(false);

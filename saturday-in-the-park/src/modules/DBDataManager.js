@@ -16,6 +16,18 @@ const DataManager = {
       .then((resp) => resp.json())
       .catch((e) => console.log(e, "from catch"));
   },
+  signoutUser(tokenObj) {
+    return fetch(`${BaseUrl}/logout/`, {
+      method: "POST",
+      body: JSON.stringify(tokenObj),
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    })
+      .then((resp) => resp.json())
+      .catch((e) => console.log(e, "from catch"));
+  },
   getUserInfo(tokenObj) {
     return fetch(`${BaseUrl}/get_user/`, {
       method: "POST",
@@ -57,7 +69,7 @@ const DataManager = {
         resp.forEach((item) => {
           areas[item.attraction.area] = item.attraction.area;
         });
-        
+
         let areaPromies = Object.keys(areas).map((area) =>
           this.getParkAreaByUrl(area).then((resp) => {
             areas[area] = resp;

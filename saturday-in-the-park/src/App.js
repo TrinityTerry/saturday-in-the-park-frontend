@@ -1,13 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Switch, Route, Link, Redirect, useHistory } from "react-router-dom";
-import {
-  Home,
-  Login,
-  Logout,
-  Register,
-  MyItenerary,
-  IteneraryForm,
-} from "./views";
+import { Home, Login, Register, MyItenerary, IteneraryForm } from "./views";
 import { DataManager } from "./modules";
 
 import { Footer, Navbar } from "./components";
@@ -50,8 +43,8 @@ function App() {
           <Switch>
             <Route
               exact
-              path="/logout"
-              render={() => <Logout getUserInfo={getUserInfo} />}
+              path="/signout"
+              render={() => <Logout user={user} getUserInfo={getUserInfo}/>}
             />
             <Route
               exact
@@ -107,7 +100,18 @@ function App() {
   );
 }
 
-function Attraction({ match }) {
-  return <h1>Look at the attraction with the id of {match.params.id}</h1>;
+function Logout({ user, getUserInfo }) {
+  const history = useHistory();
+  useEffect(() => {
+    if (user) {
+      DataManager.signoutUser({ token: user.token }).then((resp) => {
+        window.sessionStorage.removeItem("usertoken");
+        history.push("/");
+        getUserInfo();
+      });
+    }
+  }, [user]);
+  return "<h1>Signout</h1>";
 }
+
 export default App;

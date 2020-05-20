@@ -10,8 +10,6 @@ function MyItinerary({ user, match }) {
     let things = DataManager.getItenerayWithAreaInfo(user).then((resp) => {
       setItineraryItems(
         resp.map((item) => {
-          console.log(item);
-
           return {
             imageurl: item.attraction.imageurl,
             title: `Attraction: ${item.attraction.name}`,
