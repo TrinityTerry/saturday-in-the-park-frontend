@@ -1,5 +1,5 @@
-import React from "react";
-import { Switch, Route } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Switch, Route, Link, Redirect, useHistory } from "react-router-dom";
 import {
   Home,
   Login,
@@ -8,36 +8,97 @@ import {
   MyItenerary,
   IteneraryForm,
 } from "./views";
+import { DataManager } from "./modules";
 
 import { Footer, Navbar } from "./components";
 
 function App() {
+  const [user, setUser] = useState(null);
+  const history = useHistory()
+  const getUserInfo = () => {
+    const token = JSON.parse(window.sessionStorage.getItem("usertoken"));
+    if (token) {
+      DataManager.getUserInfo({ token: token }).then(setUser);
+    } else {
+      setUser(null);
+    }
+  };
+
+  useEffect(() => {
+    getUserInfo();
+
+    window.addEventListener("storage", (e) => {
+      window.sessionStorage.removeItem("usertoken")
+      history.push("/")
+      getUserInfo()
+    })
+  }, []);
   return (
     <>
-      <Navbar />
-      <Switch>
-        <Route exact path="/login" component={Login} />
-        <Route exact path="/logout" component={Logout} />
-        <Route exact path="/register" component={Register} />
-        <Route exact path="/myitinerary" component={MyItenerary} />
-        {/* <Route path="/attraction/:id" component={Attraction} /> */}
-        <Route exact path="/myitinerary/new" component={IteneraryForm} />
-        <Route
-          path="/myitinerary/:itinerary_id/edit"
-          component={IteneraryForm}
-        />
-        <Route path="/" component={Home} />
-      </Switch>
+      {user ? (
+        <>
+          <Navbar user={user} />
+          <Switch>
+            <Route
+              exact
+              path="/logout"
+              render={() => <Logout getUserInfo={getUserInfo} />}
+            />
+            <Route
+              exact
+              path="/myitinerary"
+              render={() => <MyItenerary user={user} />}
+            />
+            <Route
+              exact
+              path="/myitinerary/new"
+              render={() => <IteneraryForm user={user} />}
+            />
+            <Route
+              exact
+              path="/myitinerary/:itinerary_id/edit"
+              render={() => <IteneraryForm user={user} />}
+            />
+            <Route exact path="/" render={() => <Home user={user} />} />
+
+            <Redirect to="/" />
+          </Switch>
+        </>
+      ) : (
+        <Switch>
+          <Route
+            exact
+            path="/login"
+            render={() => <Login getUserInfo={getUserInfo} />}
+          />
+          <Route
+            exact
+            path="/register"
+            render={() => <Register getUserInfo={getUserInfo} />}
+          />
+          <Route
+            path="/"
+            exact
+            render={() => (
+              <Home
+                noUserNav={
+                  <Link to="/login">
+                    <h1>Signin</h1>
+                  </Link>
+                }
+              />
+            )}
+          />
+          <Redirect to="/" />
+        </Switch>
+      )}
+
       <Footer />
     </>
   );
 }
 
-
-function Attraction({match}){
-
-  return(
-    <h1>Look at the attraction with the id of {match.params.id}</h1>
-  )
+function Attraction({ match }) {
+  return <h1>Look at the attraction with the id of {match.params.id}</h1>;
 }
 export default App;
