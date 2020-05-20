@@ -20,6 +20,7 @@ function App() {
         <Route exact path="/logout" component={Logout} />
         <Route exact path="/register" component={Register} />
         <Route exact path="/myitinerary" component={MyItenerary} />
+        {/* <Route path="/attraction/:id" component={Attraction} /> */}
         <Route exact path="/myitinerary/new" component={IteneraryForm} />
         <Route
           path="/myitinerary/:itinerary_id/edit"
@@ -32,4 +33,11 @@ function App() {
   );
 }
 
+
+function Attraction({match}){
+
+  return(
+    <h1>Look at the attraction with the id of {match.params.id}</h1>
+  )
+}
 export default App;

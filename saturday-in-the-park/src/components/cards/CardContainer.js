@@ -1,5 +1,5 @@
 import React from "react";
-import 'semantic-ui-css/semantic.min.css'
+import "semantic-ui-css/semantic.min.css";
 import { makeStyles } from "@material-ui/core/styles";
 import GridList from "@material-ui/core/GridList";
 import GridListTile from "@material-ui/core/GridListTile";
@@ -55,31 +55,33 @@ export default function ImageGridList({ tileData }) {
   return (
     <div className={classes.root}>
       <GridList cellHeight={200} spacing={1} className={classes.gridList}>
-        {tileData.map((tile) => (
-          <GridListTile
-            key={tile.img}
-            cols={tile.featured ? 0.75 : 0.5}
-            rows={tile.featured ? 1 : 1}
-          >
-            <Link>
-              <img src={tile.img} alt={tile.title} />
-            </Link>
-            <GridListTileBar
-              title={tile.title}
-              titlePosition="top"
-              actionIcon={
-                <IconButton
-                  aria-label={`star ${tile.title}`}
-                  className={classes.icon}
-                >
-                  <StarBorderIcon />
-                </IconButton>
-              }
-              actionPosition="left"
-              className={classes.titleBar}
-            />
-          </GridListTile>
-        ))}
+        {tileData.map((tile) => {
+          return (
+            <GridListTile
+              key={tile.url}
+              cols={tile.featured ? 0.75 : 0.5}
+              rows={tile.featured ? 1 : 1}
+            >
+              <Link to={`/attraction/${tile.id}`}>
+                <img src={tile.imageurl} alt={tile.name} />
+              </Link>
+              <GridListTileBar
+                title={tile.name}
+                titlePosition="top"
+                actionIcon={
+                  <IconButton
+                    aria-label={`star ${tile.name}`}
+                    className={classes.icon}
+                  >
+                    <StarBorderIcon />
+                  </IconButton>
+                }
+                actionPosition="left"
+                className={classes.titleBar}
+              />
+            </GridListTile>
+          );
+        })}
       </GridList>
     </div>
   );
