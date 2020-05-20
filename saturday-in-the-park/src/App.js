@@ -13,8 +13,16 @@ import { DataManager } from "./modules";
 import { Footer, Navbar } from "./components";
 
 function App() {
-  const [user, setUser] = useState(null);
-  const history = useHistory()
+  const [user, setUser] = useState({
+    first: "First Name",
+    last: "Last Name",
+    email: "Email",
+    id: 0,
+    is_staff: false,
+    token: "",
+  });
+
+  const history = useHistory();
   const getUserInfo = () => {
     const token = JSON.parse(window.sessionStorage.getItem("usertoken"));
     if (token) {
@@ -28,11 +36,12 @@ function App() {
     getUserInfo();
 
     window.addEventListener("storage", (e) => {
-      window.sessionStorage.removeItem("usertoken")
-      history.push("/")
-      getUserInfo()
-    })
+      window.sessionStorage.removeItem("usertoken");
+      history.push("/");
+      getUserInfo();
+    });
   }, []);
+
   return (
     <>
       {user ? (
