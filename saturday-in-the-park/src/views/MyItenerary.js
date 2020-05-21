@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { DataManager } from "../modules";
-
+import Button from "@material-ui/core/Button";
 import { CardGroup } from "../components";
+import { useHistory } from "react-router-dom";
 
 function MyItinerary({ user, match }) {
   const [itineraryItems, setItineraryItems] = useState([]);
-
+  const history = useHistory();
   const getItineraries = () => {
     let things = DataManager.getItenerayWithAreaInfo(user).then((resp) => {
+      console.log(resp);
+
       if (resp) {
         setItineraryItems(
           resp.map((item) => {
@@ -40,8 +43,19 @@ function MyItinerary({ user, match }) {
     }
   }, [user]);
 
+  const handleClick = (e) => {
+    const name = e.currentTarget.name;
+
+    if (name == "new") {
+      history.push("/myitinerary/new");
+    }
+  };
+
   return (
     <>
+      <Button onClick={handleClick} name="new" variant="outlined">
+        Default
+      </Button>
       <CardGroup cardInfoArray={itineraryItems} />
     </>
   );
