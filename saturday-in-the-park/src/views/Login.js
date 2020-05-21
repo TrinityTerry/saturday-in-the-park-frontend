@@ -81,11 +81,12 @@ export default function Login({ getUserInfo }) {
       username: loginForm.username,
       password: loginForm.password,
     }).then((resp) => {
-      if (resp.valid) {
+      if (resp && resp.valid) {
         window.sessionStorage.setItem("usertoken", JSON.stringify(resp.token));
         getUserInfo();
         history.push("/");
       } else {
+        console.log(resp);
         setError(true);
       }
     });
@@ -164,9 +165,6 @@ export default function Login({ getUserInfo }) {
                 </Link>
               </Grid>
             </Grid>
-            <Box mt={5}>
-              <Copyright />
-            </Box>
           </form>
         </div>
       </Grid>

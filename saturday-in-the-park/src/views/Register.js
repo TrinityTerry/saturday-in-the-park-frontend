@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -11,19 +11,8 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import {Link } from "react-router-dom";
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © "}
-      <Link color="inherit" to="/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
+import { Link, useHistory } from "react-router-dom";
+import { DataManager } from "../modules";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -46,8 +35,52 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SignUp() {
+  const history = useHistory();
   const classes = useStyles();
+  const [registerForm, setRegisterForm] = useState({
+    username: "OliviaTerry",
+    email: "oliviaterry@gmail.com",
+    password: "iamgood",
+    firstName: "Olivia",
+    lastName: "Terry",
+    familyMembers: 6,
+  });
+  const [errorMessage, setErrorMessage] = useState("");
 
+  const handleChange = (e) => {
+    let name = e.target.name;
+    let value = e.target.value;
+
+    setRegisterForm((prevState) => {
+      let newObj = { ...prevState };
+      newObj[name] = value;
+      return newObj;
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const newUser = {
+      username: registerForm.username,
+      email: registerForm.email,
+      password: registerForm.password,
+      first_name: registerForm.firstName,
+      last_name: registerForm.lastName,
+      family_members: Number(registerForm.familyMembers),
+    };
+
+    DataManager.registerUser(newUser).then((resp) => {
+      //
+      if (resp.error) {
+        setErrorMessage(
+          `${Object.values(resp)[0].split(".")[1]} already taken`
+        );
+      } else {
+        history.push("/login");
+      }
+    });
+  };
   return (
     <Container component="main" maxWidth="xs">
       <Link to="/">
@@ -62,7 +95,12 @@ export default function SignUp() {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <form className={classes.form} noValidate>
+        {errorMessage && (
+          <Typography component="h3" variant="h5">
+            {errorMessage}
+          </Typography>
+        )}
+        <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -74,10 +112,13 @@ export default function SignUp() {
                 id="firstName"
                 label="First Name"
                 autoFocus
+                value={registerForm.firstName}
+                onChange={handleChange}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
+                onChange={handleChange}
                 variant="outlined"
                 required
                 fullWidth
@@ -85,10 +126,26 @@ export default function SignUp() {
                 label="Last Name"
                 name="lastName"
                 autoComplete="lname"
+                value={registerForm.lastName}
+              />
+            </Grid>
+
+            <Grid item xs={12}>
+              <TextField
+                onChange={handleChange}
+                variant="outlined"
+                required
+                fullWidth
+                id="username"
+                label="Username"
+                name="username"
+                autoComplete="username"
+                value={registerForm.username}
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
+                onChange={handleChange}
                 variant="outlined"
                 required
                 fullWidth
@@ -96,10 +153,27 @@ export default function SignUp() {
                 label="Email Address"
                 name="email"
                 autoComplete="email"
+                value={registerForm.email}
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
+                onChange={handleChange}
+                variant="outlined"
+                required
+                type="number"
+                fullWidth
+                id="familyMembers"
+                label="Family Members"
+                name="familyMembers"
+                autoComplete="familyMembers"
+                min={0}
+                value={registerForm.familyMembers}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                onChange={handleChange}
                 variant="outlined"
                 required
                 fullWidth
@@ -108,12 +182,7 @@ export default function SignUp() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary" />}
-                label="I want to receive inspiration, marketing promotions and updates via email."
+                value={registerForm.password}
               />
             </Grid>
           </Grid>
@@ -135,9 +204,6 @@ export default function SignUp() {
           </Grid>
         </form>
       </div>
-      <Box mt={5}>
-        <Copyright />
-      </Box>
     </Container>
   );
 }

@@ -8,17 +8,29 @@ function MyItinerary({ user, match }) {
 
   const getItineraries = () => {
     let things = DataManager.getItenerayWithAreaInfo(user).then((resp) => {
-      setItineraryItems(
-        resp.map((item) => {
-          return {
-            imageurl: item.attraction.imageurl,
-            title: `Attraction: ${item.attraction.name}`,
-            meta: `Park: ${item.attraction.area.name}`,
-            content: `Start Time: ${item.start_time}`,
-            actions: "",
-          };
-        })
-      );
+      if (resp) {
+        setItineraryItems(
+          resp.map((item) => {
+            return {
+              imageurl: item.attraction.imageurl,
+              title: `Attraction: ${item.attraction.name}`,
+              meta: `Park: ${item.attraction.area.name}`,
+              content: `Start Time: ${item.start_time}`,
+              actions: "",
+            };
+          })
+        );
+      } else {
+        setItineraryItems([
+          {
+            imageurl: "",
+            title: `No Items in itenerary`,
+            meta: ` `,
+            content: ` `,
+            actions: " ",
+          },
+        ]);
+      }
     });
   };
 

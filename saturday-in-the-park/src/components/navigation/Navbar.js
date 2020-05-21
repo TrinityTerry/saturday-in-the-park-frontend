@@ -4,9 +4,15 @@ import FavoriteIcon from "@material-ui/icons/Favorite";
 import AppsIcon from "@material-ui/icons/Apps";
 import { Link, useHistory } from "react-router-dom";
 import { Menu, Input } from "semantic-ui-react";
+import MenuItem from '@material-ui/core/MenuItem';
+import UIMenu from '@material-ui/core/Menu';
+
+
 
 export default function MenuExampleStackable({ user }) {
   const [activeItem, setActiveItem] = useState();
+  const [anchorEl, setAnchorEl] = useState(null);
+
   let history = useHistory();
   const handleItemClick = (e, { name }) => {
     setActiveItem(name);
@@ -45,14 +51,27 @@ export default function MenuExampleStackable({ user }) {
           <FavoriteIcon />
         </Menu.Item>
         {user ? (
-          <Menu.Item
-            position="right"
-            name="signout"
-            active={activeItem === "signout"}
-            onClick={handleItemClick}
-          >
-            <AccountCircle />
-          </Menu.Item>
+          <>
+            <Menu.Item
+              position="right"
+              name="signout"
+              aria-controls="simple-menu"
+              active={activeItem === "signout"}
+              aria-haspopup="true"
+              onClick={(event) => setAnchorEl(event.currentTarget)}
+            >
+              <AccountCircle />
+            </Menu.Item>
+            <UIMenu
+              id="simple-menu"
+              anchorEl={anchorEl}
+              keepMounted
+              open={Boolean(anchorEl)}
+              onClose={() => setAnchorEl(null)}
+            >
+              <MenuItem name="signout" onClick={() => history.push("/signout")}>Logout</MenuItem>
+            </UIMenu>
+          </>
         ) : (
           <Menu.Item
             position="right"
