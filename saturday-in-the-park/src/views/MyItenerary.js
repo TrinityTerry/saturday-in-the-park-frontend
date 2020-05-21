@@ -9,8 +9,6 @@ function MyItinerary({ user, match }) {
   const history = useHistory();
   const getItineraries = () => {
     let things = DataManager.getItenerayWithAreaInfo(user).then((resp) => {
-      console.log(resp);
-
       if (resp) {
         setItineraryItems(
           resp.map((item) => {
@@ -19,7 +17,13 @@ function MyItinerary({ user, match }) {
               title: `Attraction: ${item.attraction.name}`,
               meta: `Park: ${item.attraction.area.name}`,
               content: `Start Time: ${item.start_time}`,
-              actions: "",
+              actions: (
+                <Button
+                  onClick={() => history.push(`/myitinerary/${item.id}/edit`)}
+                >
+                  Edit
+                </Button>
+              ),
             };
           })
         );
