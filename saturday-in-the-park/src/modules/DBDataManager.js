@@ -76,8 +76,6 @@ const DataManager = {
   },
   getItenerayWithAreaInfo(user) {
     return this.getUserItineraries(user.token).then((resp) => {
-      console.log(resp);
-      
       if (resp.length > 0) {
         let areas = {};
         resp.forEach((item) => {
@@ -116,6 +114,28 @@ const DataManager = {
         "Content-Type": "application/json",
         Accept: "application/json",
       },
+    })
+      .then((resp) => resp.json())
+      .catch((e) => console.log(e, "from catch"));
+  },
+  editItineraryItem(itemObj) {
+    return fetch(`${BaseUrl}/itineraries/${itemObj.id}`, {
+      method: "PUT",
+      body: JSON.stringify(itemObj),
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    })
+      .then((resp) => resp.json())
+      .catch((e) => console.log(e, "from catch"));
+  },
+  getItineraryItem(itinerary_id) {
+    return fetch(`${BaseUrl}/itineraries/${itinerary_id}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      }
     })
       .then((resp) => resp.json())
       .catch((e) => console.log(e, "from catch"));

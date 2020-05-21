@@ -86,7 +86,6 @@ export default function Login({ getUserInfo }) {
         getUserInfo();
         history.push("/");
       } else {
-        console.log(resp);
         setError(true);
       }
     });

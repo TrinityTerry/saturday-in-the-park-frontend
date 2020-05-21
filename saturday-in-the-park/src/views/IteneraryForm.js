@@ -36,12 +36,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const IteneraryForm = ({ user, itineraryData = {} }) => {
+const IteneraryForm = ({ user, match }) => {
   const history = useHistory();
   const classes = useStyles();
   const [itineraryForm, setItineraryForm] = useState({
-    startTime: itineraryData.startTime || "12:00",
-    attraction_id: itineraryData.attraction_id || "0",
+    startTime: "12:00",
+    attraction_id: "0",
     park_id: "0",
   });
   const [attractions, setAttractions] = useState([]);
@@ -64,12 +64,34 @@ const IteneraryForm = ({ user, itineraryData = {} }) => {
     DataManager.getParkAreas().then(setParks);
   };
 
+  const getItineraryItem = (itinerary_id) => {
+    DataManager.getItineraryItem(itinerary_id).then((resp) => {
+      setItineraryForm((prevState) => {
+        let urlArray = resp.attraction.area.split("/");
+        let areaId = urlArray[urlArray.length - 1];
+        urlArray = resp.attraction.url.split("/");
+        let attractionId = urlArray[urlArray.length - 1];
+
+        let newObj = { ...prevState };
+        console.log(resp);
+        
+        newObj.startTime = resp.start_time;
+        newObj.attraction_id = attractionId;
+        newObj.park_id = areaId;
+        return newObj;
+      });
+    });
+  };
+
   useEffect(() => {
+    if (match.params.itinerary_id) {
+      getItineraryItem(match.params.itinerary_id);
+    }
+
     getParks();
   }, []);
 
   useEffect(() => {
-    console.log(itineraryForm.park_id);
     if (itineraryForm.park_id !== "0") {
       DataManager.getAttractionByArea(itineraryForm.park_id).then(
         setAttractions
@@ -92,14 +114,25 @@ const IteneraryForm = ({ user, itineraryData = {} }) => {
       setErrorMessage("Please Provide an Attraction");
     } else {
       setErrorMessage("");
-      DataManager.postItineraryItem({
-        start_time: itineraryForm.startTime,
-        attraction_id: itineraryForm.attraction_id,
-        customer_id: user.id,
-      }).then((resp) => {
-        console.log(resp);
-        history.push("/myitinerary");
-      });
+      if (match.params.itinerary_id) {
+        console.log(itineraryForm.startTime);
+        DataManager.editItineraryItem({
+          id: match.params.itinerary_id,
+          start_time: itineraryForm.startTime,
+          attraction_id: Number(itineraryForm.attraction_id),
+          customer_id: Number(user.id),
+        }).then((resp) => {
+          history.push("/myitinerary");
+        });
+      } else {
+        DataManager.postItineraryItem({
+          start_time: itineraryForm.startTime,
+          attraction_id: itineraryForm.attraction_id,
+          customer_id: user.id,
+        }).then((resp) => {
+          history.push("/myitinerary");
+        });
+      }
     }
   };
 
@@ -127,7 +160,6 @@ const IteneraryForm = ({ user, itineraryData = {} }) => {
                 name="startTime"
                 onChange={handleChange}
                 value={itineraryForm.startTime}
-                defaultValue="07:30"
                 InputLabelProps={{
                   shrink: true,
                 }}
@@ -148,7 +180,9 @@ const IteneraryForm = ({ user, itineraryData = {} }) => {
               >
                 <option aria-label="None" value={"0"} />
                 {parks.map((item) => (
-                  <option value={item.id}>{item.name}</option>
+                  <option key={item.id} value={item.id}>
+                    {item.name}
+                  </option>
                 ))}
               </Select>
             </Grid>
@@ -165,7 +199,9 @@ const IteneraryForm = ({ user, itineraryData = {} }) => {
               >
                 <option aria-label="None" value={"0"} />
                 {attractions.map((item) => (
-                  <option value={item.id}>{item.name}</option>
+                  <option key={item.id} value={item.id}>
+                    {item.name}
+                  </option>
                 ))}
               </Select>
             </Grid>
@@ -177,7 +213,9 @@ const IteneraryForm = ({ user, itineraryData = {} }) => {
             color="primary"
             className={classes.submit}
           >
-            Add to Itinerary
+            {match.params.itinerary_id
+              ? "Edit Itinerary Item"
+              : "Add to Itinerary"}
           </Button>
         </form>
       </div>

@@ -64,12 +64,12 @@ function App() {
             <Route
               exact
               path="/myitinerary/new"
-              render={() => <IteneraryForm user={user} />}
+              render={(props) => <IteneraryForm {...props} user={user} />}
             />
             <Route
               exact
               path="/myitinerary/:itinerary_id/edit"
-              render={() => <IteneraryForm user={user} />}
+              render={(props) => <IteneraryForm {...props} user={user} />}
             />
             <Route exact path="/" render={() => <Home user={user} />} />
 
