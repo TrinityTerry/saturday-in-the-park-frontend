@@ -4,10 +4,8 @@ import FavoriteIcon from "@material-ui/icons/Favorite";
 import AppsIcon from "@material-ui/icons/Apps";
 import { Link, useHistory } from "react-router-dom";
 import { Menu, Input } from "semantic-ui-react";
-import MenuItem from '@material-ui/core/MenuItem';
-import UIMenu from '@material-ui/core/Menu';
-
-
+import MenuItem from "@material-ui/core/MenuItem";
+import UIMenu from "@material-ui/core/Menu";
 
 export default function MenuExampleStackable({ user }) {
   const [activeItem, setActiveItem] = useState();
@@ -52,6 +50,7 @@ export default function MenuExampleStackable({ user }) {
         </Menu.Item>
         {user ? (
           <>
+            <Menu.Item>Hello {user.username}!</Menu.Item>
             <Menu.Item
               position="right"
               name="signout"
@@ -69,7 +68,9 @@ export default function MenuExampleStackable({ user }) {
               open={Boolean(anchorEl)}
               onClose={() => setAnchorEl(null)}
             >
-              <MenuItem name="signout" onClick={() => history.push("/signout")}>Logout</MenuItem>
+              <MenuItem name="signout" onClick={() => history.push("/signout")}>
+                Logout
+              </MenuItem>
             </UIMenu>
           </>
         ) : (
