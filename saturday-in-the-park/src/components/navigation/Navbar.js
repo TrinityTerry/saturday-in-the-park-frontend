@@ -69,7 +69,7 @@ export default function MenuExampleStackable({ user }) {
               open={Boolean(anchorEl)}
               onClose={() => setAnchorEl(null)}
             >
-              <MenuItem name="signout" onClick={handleItemClick}>Logout</MenuItem>
+              <MenuItem name="signout" onClick={() => history.push("/signout")}>Logout</MenuItem>
             </UIMenu>
           </>
         ) : (

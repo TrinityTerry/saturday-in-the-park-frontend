@@ -11,8 +11,8 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import { Link } from "react-router-dom";
-
+import { Link, useHistory } from "react-router-dom";
+import { DataManager } from "../modules";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -35,15 +35,17 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SignUp() {
+  const history = useHistory();
   const classes = useStyles();
   const [registerForm, setRegisterForm] = useState({
-    username: "",
-    email: "",
-    password: "",
-    firstName: "",
-    lastName: "",
-    familyMembers: 0,
+    username: "OliviaTerry",
+    email: "oliviaterry@gmail.com",
+    password: "iamgood",
+    firstName: "Olivia",
+    lastName: "Terry",
+    familyMembers: 6,
   });
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleChange = (e) => {
     let name = e.target.name;
@@ -56,6 +58,29 @@ export default function SignUp() {
     });
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const newUser = {
+      username: registerForm.username,
+      email: registerForm.email,
+      password: registerForm.password,
+      first_name: registerForm.firstName,
+      last_name: registerForm.lastName,
+      family_members: Number(registerForm.familyMembers),
+    };
+
+    DataManager.registerUser(newUser).then((resp) => {
+      //
+      if (resp.error) {
+        setErrorMessage(
+          `${Object.values(resp)[0].split(".")[1]} already taken`
+        );
+      } else {
+        history.push("/login");
+      }
+    });
+  };
   return (
     <Container component="main" maxWidth="xs">
       <Link to="/">
@@ -70,7 +95,12 @@ export default function SignUp() {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <form className={classes.form} noValidate>
+        {errorMessage && (
+          <Typography component="h3" variant="h5">
+            {errorMessage}
+          </Typography>
+        )}
+        <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField

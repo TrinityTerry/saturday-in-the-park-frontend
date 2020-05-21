@@ -5,6 +5,7 @@ const DataManager = {
     return fetch(`${BaseUrl}/parkareas`).then((response) => response.json());
   },
   loginUser(userInfo) {
+    
     return fetch(`${BaseUrl}/login/`, {
       method: "POST",
       body: JSON.stringify(userInfo),
@@ -20,6 +21,18 @@ const DataManager = {
     return fetch(`${BaseUrl}/logout/`, {
       method: "POST",
       body: JSON.stringify(tokenObj),
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    })
+      .then((resp) => resp.json())
+      .catch((e) => console.log(e, "from catch"));
+  },
+  registerUser(registerObj) {
+    return fetch(`${BaseUrl}/register/`, {
+      method: "POST",
+      body: JSON.stringify(registerObj),
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
