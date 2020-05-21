@@ -54,7 +54,7 @@ function MyItinerary({ user, match }) {
   return (
     <>
       <Button onClick={handleClick} name="new" variant="outlined">
-        Default
+        Add Item to Itinerary
       </Button>
       <CardGroup cardInfoArray={itineraryItems} />
     </>
