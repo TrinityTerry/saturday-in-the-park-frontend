@@ -164,9 +164,6 @@ export default function Login({ getUserInfo }) {
                 </Link>
               </Grid>
             </Grid>
-            <Box mt={5}>
-              <Copyright />
-            </Box>
           </form>
         </div>
       </Grid>

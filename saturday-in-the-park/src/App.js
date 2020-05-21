@@ -43,8 +43,18 @@ function App() {
           <Switch>
             <Route
               exact
+              path="/login"
+              render={() => <Login getUserInfo={getUserInfo} />}
+            />
+            <Route
+              exact
+              path="/register"
+              render={() => <Register getUserInfo={getUserInfo} />}
+            />
+            <Route
+              exact
               path="/signout"
-              render={() => <Logout user={user} getUserInfo={getUserInfo}/>}
+              render={() => <Logout user={user} getUserInfo={getUserInfo} />}
             />
             <Route
               exact
